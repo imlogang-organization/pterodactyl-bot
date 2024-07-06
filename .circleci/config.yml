@@ -67,7 +67,7 @@ workflows:
             branches:
               only:
                 - main
-      - build-docker-image:
+      - build-latest-docker-image:
           context: 
             - docker-creds
           requires:
@@ -87,7 +87,7 @@ workflows:
             tags:
               only:
                 - /.*/
-      - build-docker-image:
+      - build-tagged-docker-image:
           context: 
             - docker-creds
           requires:
