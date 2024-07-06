@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  pterodactyl-bot:
+    image: imlogang/pterodactyl-bot:latest
+    volumes:
+      - servers.json:/app/servers.json
+      - .env:/app/.env
+    restart: unless-stopped
