@@ -1,0 +1,102 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.2.0
+
+jobs:
+  build-latest-docker-image:
+    machine:
+      image: ubuntu-2204:current
+    steps:
+      - checkout
+      - run: 
+          name: Build Latest Docker Image
+          command: |
+            export CIRCLE_SHA1=$(echo ${CIRCLE_SHA1} | cut -c 1-5)
+            docker build --build-arg DOCKER_TAG=$CIRCLE_SHA1 -t imlogang/pterodactyl-bot:$CIRCLE_SHA1 -t imlogang/pterodactyl-bot:latest .
+      - run:
+          name: Docker Login
+          command: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - run:
+          name: Docker Push
+          command: |
+              export CIRCLE_SHA1=$(echo ${CIRCLE_SHA1} | cut -c 1-5)
+              docker push imlogang/pterodactyl-bot:$CIRCLE_SHA1
+              docker push imlogang/pterodactyl-bot:latest
+  
+  build-tagged-docker-image:
+    machine: 
+      image: ubuntu-2204:current
+    steps:
+      - checkout
+      - run: 
+          name: Build Tagged Docker Image
+          command: docker build -t imlogang/pterodactyl-bot:$CIRCLE_TAG .
+      - run:
+          name: Docker Login
+          command: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - run:
+          name: Docker Push
+          command: |
+              docker push imlogang/pterodactyl-bot:$CIRCLE_TAG
+
+
+  lint-check:
+    docker:
+      - image: cimg/node:20.14.0
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          name: Install NPM Packages
+          command: npx eslint
+
+
+workflows:
+  pr-workflow:
+    jobs:
+      - lint-check:
+          filters:
+            branches:
+              ignore:
+                - main
+  main-workflow:
+    jobs:
+      - lint-check:
+          filters:
+            branches:
+              only:
+                - main
+      - build-docker-image:
+          context: 
+            - docker-creds
+          requires:
+            - lint-check
+          filters:
+            branches:
+              only:
+                - main
+  
+  tagged-workflow:
+    jobs:
+      - lint-check:
+          filters:
+            branches:
+              ignore:
+                - /.*/
+            tags:
+              only:
+                - /.*/
+      - build-docker-image:
+          context: 
+            - docker-creds
+          requires:
+            - lint-check
+          filters:
+            branches:
+              ignore:
+                - /.*/
+            tags:
+              only:
+                - /.*/
+
