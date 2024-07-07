@@ -6,7 +6,6 @@ COPY servers.json servers.json
 COPY package.json /app/package.json
 RUN npm install
 RUN apt-get update && apt-get upgrade -y
-COPY servers.json servers.json
 COPY src /app/src
 ENTRYPOINT ["npm"]
 CMD ["run", "beemoviebot"]
