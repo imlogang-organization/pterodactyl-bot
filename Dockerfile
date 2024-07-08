@@ -8,4 +8,4 @@ RUN npm install
 RUN apt-get update && apt-get upgrade -y
 COPY src /app/src
 ENTRYPOINT ["npm"]
-CMD ["run", "beemoviebot"]
+CMD ["run", "ptero-bot"]
