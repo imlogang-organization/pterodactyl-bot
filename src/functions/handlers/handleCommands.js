@@ -2,7 +2,7 @@ require('dotenv').config();
 const fs = require('fs')
 const { REST } = require('@discordjs/rest')
 const { Routes } = require('discord-api-types/v10')
-const {BEEMOVIEBOT, DISCORD_BOT_CLIENT_ID} = process.env
+const {DISCORD_BOT_TOKEN, DISCORD_BOT_CLIENT_ID} = process.env
 
 module.exports = (client) => {
   client.handleCommands = async () => {
@@ -22,7 +22,7 @@ module.exports = (client) => {
       }
     }
 
-    const rest = new REST({ version: '10' }).setToken(BEEMOVIEBOT)
+    const rest = new REST({ version: '10' }).setToken(DISCORD_BOT_TOKEN)
     // process.env.<name> needs to be token from `.env`.
     try {
       // console.log("Started refreshing application (/) commands.");
