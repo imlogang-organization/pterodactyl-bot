@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { DISCORD_BOT_TOKEN } = process.env
 const fs = require('node:fs')
 const {
