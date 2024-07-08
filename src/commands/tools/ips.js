@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { SlashCommandBuilder } = require("discord.js");
 const { PteroToken } = process.env;
 const { PTERO_URL } = process.env
