@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js')
+const { execute } = require("../../events/client/ready");
 const { PteroToken } = process.env
 const { PTERO_URL } = process.env
 const fs = require('fs');
