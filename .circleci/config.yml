@@ -49,7 +49,7 @@ jobs:
       - checkout
       - node/install-packages
       - run:
-          name: Install NPM Packages
+          name: Lint Check
           command: npx eslint
 
 
